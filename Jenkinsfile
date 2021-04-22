@@ -132,8 +132,8 @@ spec:
         steps {
             container('java-node') {
                 script {
-                    // Install application dependency
-                    sh '''apt install pip & pip3 install -r requirements.txt'''
+
+                    sh '''sudo su & pip3 install -r requirements.txt'''
 
                     // Start OWASP Dependency Check
                     dependencyCheck(

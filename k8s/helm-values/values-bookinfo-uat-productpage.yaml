@@ -14,6 +14,6 @@ ingress:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/rewrite-target: /$2
 extraEnv:
-  DETAILS_HOSTNAME: http://details:8082
-  RATINGS_HOSTNAME: http://ratings:8081
-  REVIEWS_HOSTNAME: http://reviews:9080
+  DETAILS_HOSTNAME: http://gun-details-uat:8082
+  RATINGS_HOSTNAME: http://gun-ratings-uat:8081
+  REVIEWS_HOSTNAME: http://gun-reviews-uat:9080
