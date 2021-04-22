@@ -133,7 +133,7 @@ spec:
             container('java-node') {
                 script {
 
-                    sh '''sudo su & pip3 install -r requirements.txt'''
+                    sh '''pip3 install -r requirements.txt'''
 
                     // Start OWASP Dependency Check
                     dependencyCheck(
