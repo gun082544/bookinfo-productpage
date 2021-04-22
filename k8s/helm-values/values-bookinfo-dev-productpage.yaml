@@ -1,0 +1,15 @@
+productpage:
+  namespace: gun-bookinfo-dev
+  image: ghcr.io/gun082544/bookinfo-productpage
+  tag: dev
+  replicas: 1
+  imagePullSecrets: registry-bookinfo
+  port: 8081
+  healthCheckPath: "/health"
+ingress:
+  host: bookinfo.dev.hellodolphin.in.th
+  path: "/gun/productpage(/|$)(.*)"
+  serviceType: ClusterIP
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
