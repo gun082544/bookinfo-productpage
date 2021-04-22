@@ -35,7 +35,7 @@ spec:
     - cat
     tty: true
   - name: java-node
-    image: timbru31/java-node:11-alpine-jre-14
+    image: openkbs/jdk11-mvn-py3:v1.0.9
     command:
     - cat
     tty: true   
@@ -83,7 +83,7 @@ spec:
                     // Generate k8s-manifest-deploy.yaml for scanning
                     sh "helm template -f k8s/helm-values/values-bookinfo-${ENV_NAME}-productpage.yaml \
                         --set extraEnv.COMMIT_ID=${scmVars.GIT_COMMIT} \
-                        --namespace gun-bookinfo-${ENV_NAME} gin-productpage-${ENV_NAME} k8s/helm \
+                        --namespace gun-bookinfo-${ENV_NAME} gun-productpage-${ENV_NAME} k8s/helm \
                         > k8s-manifest-deploy.yaml"
                 }
             }
@@ -133,7 +133,7 @@ spec:
             container('java-node') {
                 script {
                     // Install application dependency
-                    sh '''cd src/ && npm install --package-lock && cd ../'''
+                    sh '''apt install pip & pip3 install requirements.txt'''
 
                     // Start OWASP Dependency Check
                     dependencyCheck(
