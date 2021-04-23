@@ -35,7 +35,7 @@ spec:
     - cat
     tty: true
   - name: java-node
-    image: timbru31/java-node:11-alpine-jre-14
+    image: saroma/jdk11-python3:latest
     command:
     - cat
     tty: true   
@@ -83,7 +83,7 @@ spec:
                     // Generate k8s-manifest-deploy.yaml for scanning
                     sh "helm template -f k8s/helm-values/values-bookinfo-${ENV_NAME}-productpage.yaml \
                         --set extraEnv.COMMIT_ID=${scmVars.GIT_COMMIT} \
-                        --namespace gun-bookinfo-${ENV_NAME} gin-productpage-${ENV_NAME} k8s/helm \
+                        --namespace gun-bookinfo-${ENV_NAME} gun-productpage-${ENV_NAME} k8s/helm \
                         > k8s-manifest-deploy.yaml"
                 }
             }
@@ -111,7 +111,7 @@ spec:
                         -D sonar.projectKey=${PROJECT_KEY} \
                         -D sonar.projectName=${PROJECT_NAME} \
                         -D sonar.projectVersion=${BRANCH_NAME}-${BUILD_NUMBER} \
-                        -D sonar.sources=./src
+                        -D sonar.sources=./
                         '''
                     }//End withSonarQubeEnv
 
@@ -132,8 +132,8 @@ spec:
         steps {
             container('java-node') {
                 script {
-                    // Install application dependency
-                    sh '''cd src/ && npm install --package-lock && cd ../'''
+
+                    sh '''pip3 install -r requirements.txt'''
 
                     // Start OWASP Dependency Check
                     dependencyCheck(
@@ -146,7 +146,7 @@ spec:
                         pattern: 'dependency-check-report.xml'
                     )
 
-                    // Remove applocation dependency
+                    // Remove application dependency
                     sh'''rm -rf src/node_modules src/package-lock.json'''
                 } // End script
             } // End container
@@ -176,7 +176,7 @@ spec:
                 script {
                     // dend Docker Image to Anchore Analyzer
                     writeFile file: 'anchore_images' , text: "ghcr.io/gun082544/bookinfo-productpage:${ENV_NAME}"
-                    anchore name: 'anchore_images' , bailOnFail: false
+                    anchore name: 'anchore_images' , bailOnFail: false , engineRetries: '10000'
                 } // End script
             } // End container
         } // End steps
