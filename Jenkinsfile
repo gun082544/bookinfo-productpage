@@ -176,7 +176,7 @@ spec:
                 script {
                     // dend Docker Image to Anchore Analyzer
                     writeFile file: 'anchore_images' , text: "ghcr.io/gun082544/bookinfo-productpage:${ENV_NAME}"
-                    anchore name: 'anchore_images' , bailOnFail: false
+                    anchore name: 'anchore_images' , bailOnFail: false , engineRetries: '10000'
                 } // End script
             } // End container
         } // End steps
